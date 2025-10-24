@@ -66,6 +66,17 @@ if (isset($_GET['pseudo'])) {
     $resultat = $requeteSession->fetchAll();
 
 }
+
+if (isset($_GET['sessionId'])) {
+    $requeteSession = $db->prepare("delete from session where id = ?");
+    $sessionId = $_GET['sessionId'];
+    $requeteSession->bindParam(1, $sessionId);
+    $requeteSession->execute();
+    $requeteSession->setFetchMode(PDO::FETCH_OBJ);
+    $resultat = $requeteSession->fetchAll();
+    header("Location: index.php");
+}
+
 ?>
 <!doctype html>
 <html lang="fr">
@@ -112,13 +123,25 @@ if (isset($_GET['pseudo'])) {
             <th>Poids</th>
             <th>Spot</th>
             <th>Date</th>
+            <th>Modifier</th>
+            <th>Supprimer</th>
         </tr>
         </thead>
         <tbody>
         <?php
-        $requeteTableau = $db->query("select * from pecheur inner join session on pecheur.Id = session.Idpecheur");
+        $requeteTableau = $db->query("select pecheur.Id as pecheur_id,
+            pecheur.pseudo, 
+            pecheur.technique, 
+            pecheur.secteur,
+            session.id as session_id,
+            session.prise, 
+            session.poids, 
+            session.spot, 
+            session.date
+        from pecheur inner join session on pecheur.Id = session.Idpecheur");
         $requeteTableau->setFetchMode(PDO::FETCH_ASSOC);
         $resultats = $requeteTableau->fetchAll();
+//        var_dump($resultats);
         foreach ($resultats as $resultat) {
             echo "<tr>
     <td>" . $resultat['pseudo'] . "</td> 
@@ -127,7 +150,19 @@ if (isset($_GET['pseudo'])) {
     <td>" . $resultat['prise'] . "</td> 
     <td>" . $resultat['poids'] . "</td> 
     <td>" . $resultat['spot'] . "</td> 
-    <td>" . $resultat['date'] . "</td> 
+    <td>" . $resultat['date'] . "</td>
+    <td>
+        <form method='get' action='update.php'>
+            <input type='hidden' name='sessionId' value='" . $resultat['session_id'] . "'>
+            <input class='btn btn-warning' type='submit' value='Modifier'>
+        </form>
+    </td>
+    <td>
+        <form method='get' action='index.php'>
+            <input type='hidden' name='sessionId' value='" . $resultat['session_id'] . "'>
+            <input class='btn btn-danger' type='submit' value='Supprimer'>
+        </form>
+    </td>
 </tr>";
         }
         ?>
