@@ -11,7 +11,23 @@ $host="localhost";
 //connection à la bdd avecc pdo
 $db=new PDO("mysql:host=$host;dbname=$dbname",$user,$pass);
 //var_dump($db);
+$requete="";
+$pecheur="";
+if(isset($_POST['pseudo'], $_POST['technique'], $_POST['secteur'])){
+    $requete=$db->prepare("select * from pecheur 
+         where pseudo = ? and secteur = ? ");
+    $pseudo=$_POST['pseudo'];
+    $technique=$_POST['technique'];
+    $secteur=$_POST['secteur'];
+    $requete->bindParam(1,$pseudo);
+    $requete->bindParam(2, $secteur);
+    $requete->execute();
+        if ($requete->rowCount() > 0){
+            $pecheur= new Pecheur($pseudo,$technique,$secteur);
+        }else{
 
+        }
+}
 ?>
 <!doctype html>
 <html lang="fr">
@@ -28,17 +44,17 @@ $db=new PDO("mysql:host=$host;dbname=$dbname",$user,$pass);
 
 
 <!--formulaire d'ajout d'une session-->
-<form class="bg-primary-subtle p-3 rounded-2" action="index.php">
+<form class="bg-primary-subtle p-3 rounded-2" method="post" action="index.php">
     <div class="display-1 m-1 mb-3">Poste ta session</div>
     <div class="d-flex flex-column">
-        <input class="form-control mb-2 " type="text" name="Pseudo" placeholder="Pseudo">
-        <input class="form-control mb-2 " type="text" name="technique" placeholder="Technique préférée">
-        <input class="form-control mb-2 " type="text" name="secteur" placeholder="Secteur">
+        <input class="form-control mb-2 " type="text" name="Pseudo" placeholder="Pseudo" id="pseudo">
+        <input class="form-control mb-2 " type="text" name="technique" placeholder="Technique préférée" id="technique">
+        <input class="form-control mb-2 " type="text" name="secteur" placeholder="Secteur" id="secteur">
     </div>
     <div class="d-flex flex-column">
-        <input class="form-control mb-2" type="text" name="Prises" placeholder="Prises">
-        <input class="form-control mb-2" type="text" name="poids" placeholder="Poids total">
-        <input class="form-control mb-2" type="date" name="date" placeholder="Date">
+        <input class="form-control mb-2" type="text" name="Prises" placeholder="Prises" id="prises">
+        <input class="form-control mb-2" type="text" name="poids" placeholder="Poids total" id="poids">
+        <input class="form-control mb-2" type="date" name="date" placeholder="Date" id="date">
     </div>
     <input class="btn btn-outline-primary mb-2" type="submit" value="Ajouter">
 </form>
