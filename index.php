@@ -146,7 +146,9 @@ if (isset($_GET['sessionId'])) {
             $requete->bindParam(1,$valeur);
             $requete->bindParam(2, $valeur);
             $requete->execute();
-        }
+            $requete->setFetchMode(PDO::FETCH_ASSOC);
+            $resultats = $requete->fetchAll();
+        }else{
         $requeteTableau = $db->query("select pecheur.Id as pecheur_id,
             pecheur.pseudo, 
             pecheur.technique, 
@@ -159,6 +161,7 @@ if (isset($_GET['sessionId'])) {
         from pecheur inner join session on pecheur.Id = session.Idpecheur");
         $requeteTableau->setFetchMode(PDO::FETCH_ASSOC);
         $resultats = $requeteTableau->fetchAll();
+        }
 //        var_dump($resultats);
         foreach ($resultats as $resultat) {
             echo "<tr>
