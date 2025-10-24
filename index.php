@@ -121,7 +121,7 @@ if (isset($_GET['sessionId'])) {
     </form>
 
     <!--tableau des session-->
-    <table class="table table-bordered table-striped table-hover">
+    <table class="table  table-bordered table-info table-striped-columns table-hover">
         <thead>
 
         <tr>
@@ -138,6 +138,7 @@ if (isset($_GET['sessionId'])) {
         </thead>
         <tbody>
         <?php
+// condition pour afficher les sessions en fonction de la recherche
         if (isset($_GET['recherche'])) {
             $requete=$db->prepare("select pecheur.Id as pecheur_id,
             pecheur.pseudo, 
@@ -195,13 +196,13 @@ if (isset($_GET['sessionId'])) {
     <td>
         <form method='get' action='update.php'>
             <input type='hidden' name='sessionId' value='" . $resultat['session_id'] . "'>
-            <input class='btn btn-warning' type='submit' value='Modifier'>
+            <button class='btn btn-outline-warning' type='submit' value='Modifier'><i class='bi bi-pencil-square p-3'></i></button>
         </form>
     </td>
     <td>
         <form method='get' action='index.php'>
             <input type='hidden' name='sessionId' value='" . $resultat['session_id'] . "'>
-            <input class='btn btn-danger' type='submit' value='Supprimer'>
+            <button class='btn btn-outline-danger' type='submit' value=''> <i class='bi bi-trash p-3'></i></button>
         </form>
     </td>
 </tr>";
