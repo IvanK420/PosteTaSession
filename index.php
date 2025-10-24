@@ -139,14 +139,35 @@ if (isset($_GET['sessionId'])) {
         <tbody>
         <?php
         if (isset($_GET['recherche'])) {
-            $requete=$db->prepare("select * from pecheur 
+            $requete=$db->prepare("select pecheur.Id as pecheur_id,
+            pecheur.pseudo, 
+            pecheur.technique, 
+            pecheur.secteur,
+            session.id as session_id,
+            session.prise, 
+            session.poids, 
+            session.spot, 
+            session.date
+        from pecheur inner join session on pecheur.Id = session.Idpecheur 
          where pseudo like ?  or 
-         secteur like ?");
+         secteur like ? or
+         technique like ? or
+         poids like ? or
+         prise like ? or 
+         spot like ? or
+          date like ?");
             $valeur="%".$_GET['recherche']."%";
             $requete->bindParam(1,$valeur);
             $requete->bindParam(2, $valeur);
+            $requete->bindParam(3, $valeur);
+            $requete->bindParam(4, $valeur);
+            $requete->bindParam(5, $valeur);
+            $requete->bindParam(6, $valeur);
+            $requete->bindParam(7, $valeur);
             $requete->execute();
-        }
+            $requete->setFetchMode(PDO::FETCH_ASSOC);
+            $resultats = $requete->fetchAll();
+        }else{
         $requeteTableau = $db->query("select pecheur.Id as pecheur_id,
             pecheur.pseudo, 
             pecheur.technique, 
@@ -159,6 +180,8 @@ if (isset($_GET['sessionId'])) {
         from pecheur inner join session on pecheur.Id = session.Idpecheur");
         $requeteTableau->setFetchMode(PDO::FETCH_ASSOC);
         $resultats = $requeteTableau->fetchAll();
+
+        }
 //        var_dump($resultats);
         foreach ($resultats as $resultat) {
             echo "<tr>
