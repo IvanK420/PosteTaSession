@@ -2,29 +2,32 @@
 
 class Pecheur
 {
-    private $Id;
+    private $id;
     private $pseudo;
-    private $techniques;
+    private $technique;
     private $secteur;
 
-    /**
-     * @param $pseudo
-     * @param $techniques
-     * @param $secteur
-     */
-    public function __construct($pseudo, $techniques, $secteur)
+
+    public function __construct()
     {
-        $this->pseudo = $pseudo;
-        $this->techniques = $techniques;
-        $this->secteur = $secteur;
+
+    }
+
+    /**
+     * @param mixed $id
+     */
+    public function setId($id)
+    {
+        $this->id = $id;
     }
 
     /**
      * @return mixed
      */
+
     public function getId()
     {
-        return $this->Id;
+        return $this->id;
     }
 
     /**
@@ -46,17 +49,17 @@ class Pecheur
     /**
      * @return mixed
      */
-    public function getTechniques()
+    public function getTechnique()
     {
-        return $this->techniques;
+        return $this->technique;
     }
 
     /**
-     * @param mixed $techniques
+     * @param mixed $technique
      */
-    public function setTechniques($techniques)
+    public function setTechnique($technique)
     {
-        $this->techniques = $techniques;
+        $this->technique = $technique;
     }
 
     /**

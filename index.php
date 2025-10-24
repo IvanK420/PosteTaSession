@@ -1,7 +1,7 @@
 <?php
 //inclut les fichiers nécessaires à l'utilisation de mes classes
-require_once "Pecheur.php";
-require_once "Session.php";
+include "Pecheur.php";
+include "Session.php";
 //données nécessaires à la connection à ma bdd
 $user="root";
 $pass="";
@@ -11,22 +11,51 @@ $host="localhost";
 //connection à la bdd avecc pdo
 $db=new PDO("mysql:host=$host;dbname=$dbname",$user,$pass);
 //var_dump($db);
-$requete="";
+$requetePecheur="";
+$requeteSession="";
 $pecheur="";
-if(isset($_POST['pseudo'], $_POST['technique'], $_POST['secteur'])){
-    $requete=$db->prepare("select * from pecheur 
+if(isset($_GET['pseudo'])){
+    $requetePecheur=$db->prepare("select * from pecheur
          where pseudo = ? and secteur = ? ");
-    $pseudo=$_POST['pseudo'];
-    $technique=$_POST['technique'];
-    $secteur=$_POST['secteur'];
-    $requete->bindParam(1,$pseudo);
-    $requete->bindParam(2, $secteur);
-    $requete->execute();
-        if ($requete->rowCount() > 0){
-            $pecheur= new Pecheur($pseudo,$technique,$secteur);
-        }else{
+    $pseudo=$_GET['pseudo'];
+    $technique=$_GET['technique'];
+    $secteur=$_GET['secteur'];
+    $requetePecheur->bindParam(1,$pseudo);
+    $requetePecheur->bindParam(2, $secteur);
+    $requetePecheur->execute();
+    $requetePecheur->setFetchMode(PDO::FETCH_CLASS, "Pecheur");
+    $resultat=$requetePecheur->fetchAll();
 
+//  vérification de l'existence du pecheur dans la bdd
+
+        if (empty($resultat)){
+            $pecheur= new Pecheur();
+            $pecheur->setPseudo($pseudo);
+            $pecheur->setSecteur($secteur);
+            $pecheur->setTechnique($technique);
+            $requeteCreationPecheur=$db->query("insert into pecheur(pseudo,technique,secteur) values('$pseudo' ,'$technique','$secteur') ");
+        }else{
+        $pecheur= $resultat[0];
         }
+//    recupération de l'id du pecheur dans la bdd
+    $requeteID=$db->query("select Id from pecheur where pseudo = '$pseudo' and secteur = '$secteur'");
+    $requeteID->setFetchMode(PDO::FETCH_OBJ);
+    $resultatID=$requeteID->fetchAll();
+    $idPecheur=$resultatID[0]->Id;
+
+//  création d'une session dans la bdd
+    $requeteSession=$db->prepare("insert into session(Idpecheur,prise,poids,date) values(?,?,?,?)");
+    $prise=$_GET['poisson'];
+    $poids=$_GET['poids'];
+    $date=$_GET['date'];
+    $requeteSession->bindParam(1,$idPecheur);
+    $requeteSession->bindParam(2,$prise);
+    $requeteSession->bindParam(3,$poids);
+    $requeteSession->bindParam(4,$date);
+    $requeteSession->execute();
+    $requeteSession->setFetchMode(PDO::FETCH_OBJ);
+    $resultat=$requeteSession->fetchAll();
+
 }
 ?>
 <!doctype html>
@@ -44,29 +73,32 @@ if(isset($_POST['pseudo'], $_POST['technique'], $_POST['secteur'])){
 
 
 <!--formulaire d'ajout d'une session-->
-<form class="bg-primary-subtle p-3 rounded-2" method="post" action="index.php">
+<form class="bg-primary-subtle p-3 rounded-2" method="get" action="index.php">
     <div class="display-1 m-1 mb-3">Poste ta session</div>
     <div class="d-flex flex-column">
-        <input class="form-control mb-2 " type="text" name="Pseudo" placeholder="Pseudo" id="pseudo">
+        <input class="form-control mb-2 " type="text" name="pseudo" placeholder="Pseudo" id="pseudo">
         <input class="form-control mb-2 " type="text" name="technique" placeholder="Technique préférée" id="technique">
         <input class="form-control mb-2 " type="text" name="secteur" placeholder="Secteur" id="secteur">
     </div>
     <div class="d-flex flex-column">
-        <input class="form-control mb-2" type="text" name="Prises" placeholder="Prises" id="prises">
+        <input class="form-control mb-2" type="text" name="poisson"  placeholder="Prises" id="poisson">
         <input class="form-control mb-2" type="text" name="poids" placeholder="Poids total" id="poids">
-        <input class="form-control mb-2" type="date" name="date" placeholder="Date" id="date">
+        <input class="form-control mb-2" type="date" name="date"  placeholder="Date" id="date">
     </div>
     <input class="btn btn-outline-primary mb-2" type="submit" value="Ajouter">
 </form>
+
 <!--tableau des session-->
-<table>
+<table class="table table-bordered">
     <thead>
     <tr></tr>
     </thead>
     <tbody>
     <tr>
         <td>
+            <?php
 
+            ?>
         </td>
     </tr>
     </tbody>
