@@ -2,27 +2,16 @@
 
 class Session
 {
-    private $Id;
-    private $Idpecheur;
+    private $id;
+    private $idPecheur;
     private $date;
-    private $prises;
+    private $prise;
     private $poids;
     private $spot;
 
-    /**
-     * @param $Idpecheur
-     * @param $date
-     * @param $prises
-     * @param $poids
-     * @param $spot
-     */
-    public function __construct($Idpecheur, $date, $prises, $poids, $spot)
+
+    public function __construct()
     {
-        $this->Idpecheur = $Idpecheur;
-        $this->date = $date;
-        $this->prises = $prises;
-        $this->poids = $poids;
-        $this->spot = $spot;
     }
 
     /**
@@ -30,19 +19,27 @@ class Session
      */
     public function getId()
     {
-        return $this->Id;
-    }
-    public function getIdpecheur()
-    {
-        return $this->Idpecheur;
+        return $this->id;
     }
 
     /**
-     * @param mixed $Idpecheur
+     * @param mixed $id
      */
-    public function setIdpecheur($Idpecheur)
+    public function setId($id)
     {
-        $this->Idpecheur = $Idpecheur;
+        $this->id = $id;
+    }
+    public function getIdPecheur()
+    {
+        return $this->idPecheur;
+    }
+
+    /**
+     * @param mixed $idPecheur
+     */
+    public function setIdPecheur($idPecheur)
+    {
+        $this->idPecheur = $idPecheur;
     }
 
     /**
@@ -64,17 +61,17 @@ class Session
     /**
      * @return mixed
      */
-    public function getPrises()
+    public function getPrise()
     {
-        return $this->prises;
+        return $this->prise;
     }
 
     /**
-     * @param mixed $prises
+     * @param mixed $prise
      */
-    public function setPrises($prises)
+    public function setPrise($prise)
     {
-        $this->prises = $prises;
+        $this->prise = $prise;
     }
 
     /**

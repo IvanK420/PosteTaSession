@@ -1,4 +1,5 @@
 <?php
+include "Session.php";
 //données nécessaires à la connection à ma bdd
 $user = "root";
 $pass = "";
@@ -7,6 +8,15 @@ $host = "localhost";
 
 //connection à la bdd avecc pdo
 $db = new PDO("mysql:host=$host;dbname=$dbname", $user, $pass);
+$requeteModification=$db->prepare("select * from session where id = ?");
+$sessionId = $_GET['sessionId'];
+$requeteModification->bindParam(1, $sessionId);
+$requeteModification->execute();
+$requeteModification->setFetchMode(PDO::FETCH_CLASS, "Session");
+$resultat = $requeteModification->fetchAll();
+$session = $resultat[0];
+
+
 
 //requete de modification
 if (isset($_GET['poisson']) && isset($_GET['poids']) && isset($_GET['spot']) && isset($_GET['date'])){
@@ -45,10 +55,10 @@ if (isset($_GET['poisson']) && isset($_GET['poids']) && isset($_GET['spot']) && 
 <form class="bg-primary-subtle p-3 rounded-2 m-5" method="get" action="update.php">
     <div class="display-1 m-1 mb-3">Modifie ta session</div>
     <div class="d-flex flex-column">
-        <input class="form-control mb-2" type="text" name="poisson" placeholder="Prises" id="poisson">
-        <input class="form-control mb-2" type="text" name="poids" placeholder="Poids total" id="poids">
-        <input class="form-control mb-2" type="text" name="spot" placeholder="Spot de pêche" id="spot">
-        <input class="form-control mb-2" type="date" name="date" placeholder="Date" id="date">
+        <input class="form-control mb-2" type="text" name="poisson" placeholder="Prises" id="poisson" value="<?php echo $session->getPrise() ?>">
+        <input class="form-control mb-2" type="text" name="poids" placeholder="Poids total" id="poids" value="<?php echo $session->getPoids() ?>">
+        <input class="form-control mb-2" type="text" name="spot" placeholder="Spot de pêche" id="spot" value="<?php echo $session->getSpot() ?>">
+        <input class="form-control mb-2" type="date" name="date" placeholder="Date" id="date" value="<?php echo $session->getDate() ?>">
     </div>
     <input class="btn btn-outline-primary mb-2" type="submit" value="Modifier">
 </form>
