@@ -32,18 +32,6 @@ class Session
     {
         return $this->Id;
     }
-
-    /**
-     * @param mixed $Id
-     */
-    public function setId($Id)
-    {
-        $this->Id = $Id;
-    }
-
-    /**
-     * @return mixed
-     */
     public function getIdpecheur()
     {
         return $this->Idpecheur;

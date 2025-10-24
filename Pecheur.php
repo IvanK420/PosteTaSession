@@ -22,6 +22,14 @@ class Pecheur
     /**
      * @return mixed
      */
+    public function getId()
+    {
+        return $this->Id;
+    }
+
+    /**
+     * @return mixed
+     */
     public function getPseudo()
     {
         return $this->pseudo;
