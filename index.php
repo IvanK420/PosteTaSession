@@ -28,17 +28,17 @@ $db=new PDO("mysql:host=$host;dbname=$dbname",$user,$pass);
 
 
 <!--formulaire d'ajout d'une session-->
-<form class="bg-primary-subtle p-3" action="index.php">
+<form class="bg-primary-subtle p-3 rounded-2" action="index.php">
     <div class="display-1 m-1 mb-3">Poste ta session</div>
     <div class="d-flex flex-column">
-        <input class="form-control mb-2" type="text" name="Pseudo" placeholder="Pseudo">
-        <input class="form-control mb-2" type="text" name="technique" placeholder="technique préférée">
-        <input class="form-control mb-2" type="text" name="secteur" placeholder="secteur">
+        <input class="form-control mb-2 " type="text" name="Pseudo" placeholder="Pseudo">
+        <input class="form-control mb-2 " type="text" name="technique" placeholder="Technique préférée">
+        <input class="form-control mb-2 " type="text" name="secteur" placeholder="Secteur">
     </div>
     <div class="d-flex flex-column">
         <input class="form-control mb-2" type="text" name="Prises" placeholder="Prises">
-        <input class="form-control mb-2" type="text" name="poids" placeholder="poids total">
-        <input class="form-control mb-2" type="date" name="date" placeholder="date">
+        <input class="form-control mb-2" type="text" name="poids" placeholder="Poids total">
+        <input class="form-control mb-2" type="date" name="date" placeholder="Date">
     </div>
     <input class="btn btn-outline-primary mb-2" type="submit" value="Ajouter">
 </form>
