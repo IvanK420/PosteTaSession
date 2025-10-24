@@ -2,6 +2,7 @@
 
 class Pecheur
 {
+    private $Id;
     private $pseudo;
     private $techniques;
     private $secteur;
