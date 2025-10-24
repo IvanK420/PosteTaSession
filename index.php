@@ -33,12 +33,19 @@ if(isset($_GET['pseudo'])){
             $pecheur->setPseudo($pseudo);
             $pecheur->setSecteur($secteur);
             $pecheur->setTechnique($technique);
-            $requeteCreationPecheur=$db->query("insert into pecheur(pseudo,technique,secteur) values('$pseudo' ,'$technique','$secteur') ");
+            $requeteCreationPecheur=$db->prepare("insert into pecheur(pseudo,technique,secteur) values(?,?,?)");
+            $requeteCreationPecheur->bindParam(1,$pseudo);
+            $requeteCreationPecheur->bindParam(2,$technique);
+            $requeteCreationPecheur->bindParam(3,$secteur);
+            $requeteCreationPecheur->execute();
         }else{
         $pecheur= $resultat[0];
         }
 //    recupération de l'id du pecheur dans la bdd
-    $requeteID=$db->query("select Id from pecheur where pseudo = '$pseudo' and secteur = '$secteur'");
+    $requeteID=$db->prepare("select Id from pecheur where pseudo = ? and secteur = ?");
+    $requeteID->bindParam(1,$pseudo);
+    $requeteID->bindParam(2,$secteur);
+    $requeteID->execute();
     $requeteID->setFetchMode(PDO::FETCH_OBJ);
     $resultatID=$requeteID->fetchAll();
     $idPecheur=$resultatID[0]->Id;
