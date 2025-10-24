@@ -111,6 +111,14 @@ if (isset($_GET['sessionId'])) {
         </div>
         <input class="btn btn-outline-primary mb-2" type="submit" value="Ajouter">
     </form>
+    <div style="container">
+
+
+<!--champs de recherche-->
+    <form action="index.php">
+        <input type="text" name="recherche" placeholder="Rechercher" style="form-control" id="recherche">
+        <input class="btn btn-outline-primary" type="submit" value="Rechercher" >
+    </form>
 
     <!--tableau des session-->
     <table class="table table-bordered table-striped table-hover">
@@ -130,6 +138,15 @@ if (isset($_GET['sessionId'])) {
         </thead>
         <tbody>
         <?php
+        if (isset($_GET['recherche'])) {
+            $requete=$db->prepare("select * from pecheur 
+         where pseudo like ?  or 
+         secteur like ?");
+            $valeur="%".$_GET['recherche']."%";
+            $requete->bindParam(1,$valeur);
+            $requete->bindParam(2, $valeur);
+            $requete->execute();
+        }
         $requeteTableau = $db->query("select pecheur.Id as pecheur_id,
             pecheur.pseudo, 
             pecheur.technique, 
@@ -169,6 +186,7 @@ if (isset($_GET['sessionId'])) {
         ?>
         </tbody>
     </table>
+    </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
